@@ -1,0 +1,5 @@
+tmp
+obj
+bin
+*.elf
+*.iso

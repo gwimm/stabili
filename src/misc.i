@@ -1,0 +1,2 @@
+    SEGMENT_CODE equ 0x08
+    SEGMENT_DATA equ 0x10
