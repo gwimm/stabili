@@ -22,7 +22,8 @@ enum vga_color {
 
 struct vga_ctx {
     struct vga_entry* fb;
-    usize last_index;
+	usize row;
+	usize col;
 };
 
 # define CGA_BASE 0x000B8000

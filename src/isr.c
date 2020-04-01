@@ -1,14 +1,10 @@
+# include "isr.h"
+
 # include "intdef.h"
+# include "misc.h"
 # include "lib.h"
 
-struct registers {
-   u32 ds;                                      // isr_com_stub
-   u32 edi, esi, ebp, esp, ebx, edx, ecx, eax;  // by pusha
-   u32 int_num, err_code;                       // isr_n
-   u32 eip, cs, eflags, useresp, ss;            // by cpu
-};
-
-char *except_msg[] = {
+const char *except_msg[] = {
     "division by zero",
     "debug",
     "non maskable interrupt",
@@ -46,8 +42,12 @@ char *except_msg[] = {
     "reserved",
 };
 
-void isr_handler(struct registers reg) {
-    k_fmt("int received '%x', %s\n",
-        reg.int_num,
-        except_msg[reg.int_num]);
+void isr_handler(struct int_ctx ctx) {
+    k_fmt(except_msg[ctx.int_num]);
+    asm (
+        "halt:;"
+        "   cli;"
+        "   hlt;"
+        "   jmp halt;"
+    );
 }

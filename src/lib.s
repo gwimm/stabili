@@ -1,15 +1,12 @@
-%if 0
-    global port_in
-    global port_out
+    global port_in:function
+    global port_out:function
 
 port_in:
-    mov edx, edi
-    out ax, dx
+    movzx edx, word [esp + 4]
     ret
 
 port_out:
-    mov eax, esi
-    mov edx, edi
+    mov al, byte [esp + 8]
+    movzx edx, word [esp + 4]
     out dx, al
     ret
-%endif

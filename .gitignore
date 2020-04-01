@@ -1,5 +1,6 @@
 tmp
 obj
 bin
+iso
 *.elf
 *.iso

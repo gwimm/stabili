@@ -1,5 +1,3 @@
-include conf.mk
-
 SRC_DIR = src
 OBJ_DIR = obj
 
@@ -11,6 +9,7 @@ C_SRC = $(wildcard $(SRC_DIR)/*.c)
 CC = clang
 CCF = 						\
 	-m32					\
+	-O2						\
 	-include 'src/intdef.h' \
 	-nostdlib 				\
 	-nostdinc 				\
@@ -38,6 +37,11 @@ LDF = 				\
 	-melf_i386		\
 	-T
 
+EMU = qemu-system-x86_64
+EMUF = 					\
+	-d int 				\
+	-D ./tmp/emu.log
+
 NAME = os
 
 all: os.elf
@@ -49,13 +53,14 @@ check_multiboot: os.elf
 	 fi
 
 run: $(NAME).iso
-	qemu-system-x86_64 -cdrom os.iso
+	$(EMU) $(EMUF) -cdrom $<
 
 $(NAME).iso: $(NAME).elf
 	mkdir -p iso/boot/grub
-	cp $(NAME).elf iso/boot/$(NAME).elf
-	cp grub.cfg iso/boot/grub/grub.cfg
-	grub-mkrescue -o $(NAME).iso iso
+	cp $< iso/boot/$<
+	echo "menuentry \"$(NAME)\" { multiboot /boot/$< }" \
+		> iso/boot/grub/grub.cfg
+	grub-mkrescue -o $@ iso
 
 $(NAME).elf: $(NAME).elf.ld $(OBJ)
 	$(LD) -o $@ $(LDF) $^

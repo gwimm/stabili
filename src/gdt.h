@@ -1,5 +1,5 @@
-# ifndef   __GDT_H__
-# define   __GDT_H__
+# ifndef    __GDT_H__
+# define    __GDT_H__
 
 # include "misc.h"
 
@@ -8,7 +8,7 @@ struct gdt_entry {
     u16 base_0;
     u8  base_1;
     union {
-        u8 access;
+        u8 flags;
         struct {
             # define GDT_TYPE_CODE 0xA
             # define GDT_TYPE_DATA 0x2
@@ -20,8 +20,8 @@ struct gdt_entry {
             # define GDT_RING_3 3
             u8  dpl : 2;
             u8  present : 1;
-        };
-    } packed;
+        } packed;
+    };
     union {
         struct {
             u8  len_1 : 4;
@@ -43,6 +43,8 @@ struct gdt_ptr {
     struct gdt_entry* base;
 } packed;
 
-extern void gdt_load(void);
+extern void gdt_load(struct gdt_ptr*);
 
-# endif // __GDT_H__
+void gdt_init(void);
+
+# endif // !__GDT_H__

@@ -33,4 +33,9 @@ void *memset(void *dst, u8 c, u64 len) {
 	return dst;
 }
 
-usize k_fmt(const i8* fmt, ...) { return fmt[0]; } // TODO: fix stub
+# include "vga.h"
+
+usize k_fmt(const i8* fmt, ...) {
+    // vga_write_string((i8*)fmt);
+    return fmt[0];
+}

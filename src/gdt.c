@@ -47,3 +47,7 @@ struct gdt_ptr gdtd = (struct gdt_ptr) {
     .limit = sizeof(gdt) - 1,
     .base = (void*)&gdt,
 };
+
+void gdt_init(void) {
+    gdt_load(&gdtd);
+}
