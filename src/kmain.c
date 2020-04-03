@@ -11,5 +11,7 @@ int zero = 0, three = 3;
 void kmain(void) {
     gdt_init();
     idt_init();
-    vga_write_string("end, pwp");
+    i8* str = "0 uwu";
+    str[0] += sizeof(u64);
+    vga_write_string(str);
 }

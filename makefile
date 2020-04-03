@@ -20,14 +20,6 @@ CCF = 						\
 	-Werror					\
 	-c
 
-Z_SRC = $(wildcard $(SRC_DIR)/*.z)
-ZC = tmp/zig-linux-x86_64-0.5.0+d788b0cd8/zig
-ZCF = 								\
-	build-obj						\
-	--strip							\
-	--release-small					\
-	-target x86_64-freestanding-none
-
 OBJ = $(addprefix $(OBJ_DIR)/,	\
 	$(C_SRC:$(SRC_DIR)/%=%.o)	\
 	$(Z_SRC:$(SRC_DIR)/%=%.o)	\
@@ -58,8 +50,11 @@ run: $(NAME).iso
 $(NAME).iso: $(NAME).elf
 	mkdir -p iso/boot/grub
 	cp $< iso/boot/$<
-	echo "menuentry \"$(NAME)\" { multiboot /boot/$< }" \
-		> iso/boot/grub/grub.cfg
+	echo "												\
+		set timeout=0\n									\
+		menuentry \"$(NAME)\" {							\
+			multiboot /boot/$< } 						\
+	" > iso/boot/grub/grub.cfg
 	grub-mkrescue -o $@ iso
 
 $(NAME).elf: $(NAME).elf.ld $(OBJ)
@@ -70,9 +65,6 @@ $(OBJ_DIR)/%.c.o: $(SRC_DIR)/%.c $(OBJ_DIR)
 
 $(OBJ_DIR)/%.s.o: $(SRC_DIR)/%.s $(OBJ_DIR)
 	$(AS) -o $@ $(ASF) $<
-
-$(OBJ_DIR)/%.z.o: $(SRC_DIR)/%.z $(OBJ_DIR)
-	$(ZC) --name $(@:%.o=%) $(ZCF) $<
 
 $(OBJ_DIR):
 	mkdir -p $(OBJ_DIR)

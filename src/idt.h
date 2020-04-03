@@ -34,7 +34,7 @@ struct idt_ptr {
     struct idt_entry* base;
 } packed;
 
-extern void idt_load(struct idt_ptr*);
+extern void lidt(struct idt_ptr*);
 
 void idt_init(void);
 

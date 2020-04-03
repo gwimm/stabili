@@ -74,8 +74,8 @@ struct multiboot_info {
     u32 mem_lower;
     u32 mem_upper;
 
-    u32 boot_device; // "root" partition
-    u32 cmdline; // Kernel command line
+    u32 boot_device;    // "root" partition
+    u32 cmdline;        // Kernel command line
 
     // Boot-Module list
     u32 mods_count;
@@ -98,36 +98,39 @@ struct multiboot_info {
     u32 boot_loader_name;
     u32 apm_table;
 
-    // Video
-    u32 vbe_control_info;
-    u32 vbe_mode_info;
-    u16 vbe_mode;
-    u16 vbe_interface_seg;
-    u16 vbe_interface_off;
-    u16 vbe_interface_len;
+    // video
+    struct {
+        u32 control_info;
+        u32 mode_info;
+        u16 mode;
+        u16 interface_seg;
+        u16 interface_off;
+        u16 interface_len;
+    } vbe;
+    struct {
+        u64 addr;
+        u32 pitch;
+        u32 width;
+        u32 height;
+        u8  bpp;
 
-    u64 framebuffer_addr;
-    u32 framebuffer_pitch;
-    u32 framebuffer_width;
-    u32 framebuffer_height;
-    u8 framebuffer_bpp;
-
-    # define MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED     0
-    # define MULTIBOOT_FRAMEBUFFER_TYPE_RGB         1
-    # define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT    2
-    u8 framebuffer_type;
-    union {
-        struct {
-            u32 palette_addr;
-            u16 palette_num_colors;
-        };
-        struct {
-            u8 red_field_position;
-            u8 red_mask_size;
-            u8 green_field_position;
-            u8 green_mask_size;
-            u8 blue_field_position;
-            u8 blue_mask_size;
+        # define MULTIBOOT_FRAMEBUFFER_TYPE_INDEXED     0
+        # define MULTIBOOT_FRAMEBUFFER_TYPE_RGB         1
+        # define MULTIBOOT_FRAMEBUFFER_TYPE_EGA_TEXT    2
+        u8 type;
+        union {
+            struct {
+                u32 palette_addr;
+                u16 palette_num_colors;
+            };
+            struct {
+                u8 red_field_position;
+                u8 red_mask_size;
+                u8 green_field_position;
+                u8 green_mask_size;
+                u8 blue_field_position;
+                u8 blue_mask_size;
+            };
         };
     } framebuffer;
 };

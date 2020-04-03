@@ -1,5 +1,5 @@
-    global idt_load:function
-idt_load:
+    global lidt:function
+lidt:
     mov eax, dword [esp + 4]
     lidt [eax]
     ret

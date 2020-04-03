@@ -39,5 +39,5 @@ void idt_init(void) {
         };
     }
 
-    idt_load(&idtd);
+    lidt(&idtd);
 }
