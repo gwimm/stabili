@@ -1,5 +1,5 @@
-pub const BOOTLOADER_MAGIC = 0x2BADB002;
-pub const HEADER_MAGIC = 0x1BADB002;
+pub const BOOTLOADER_MAGIC: u32 = 0x2BADB002;
+pub const HEADER_MAGIC:     u32 = 0x1BADB002;
 
 pub const Header = extern struct {
     magic:          u32,
@@ -14,20 +14,6 @@ pub const Header = extern struct {
     width:          u32,
     height:         u32,
     depth:          u32,
-};
-
-pub const SymbolTable = extern struct {
-    tabsize:    u32,
-    strsize:    u32,
-    addr:       u32,
-    reserved:   u32,
-};
-
-pub const SectionTable = extern struct {
-    num:    u32,
-    size:   u32,
-    addr:   u32,
-    shndx:  u32,
 };
 
 pub const Info = extern struct {
@@ -55,33 +41,50 @@ pub const Info = extern struct {
     boot_loader_name:   u32,
     apm_table:          u32,
 
-    vbe_control_info:   u32,
-    vbe_mode_info:      u32,
-    vbe_mode:           u16,
-    vbe_interface_seg:  u16,
-    vbe_interface_off:  u16,
-    vbe_interface_len:  u16,
-
-    framebuffer_addr:   u64,
-    framebuffer_pitch:  u32,
-    framebuffer_width:  u32,
-    framebuffer_height: u32,
-    framebuffer_bpp:    u8,
-    framebuffer_type:   u8,
-    framebuffer: extern union {
-        palette: extern struct {
-            addr:       u32,
-            num_colors: u16,
-        },
-        colours: extern struct {
-            red_field_position:     u8,
-            red_mask_size:          u8,
-            green_field_position:   u8,
-            green_mask_size:        u8,
-            blue_field_position:    u8,
-            blue_mask_size:         u8,
+    vbe: extern struct {
+        control_info:   u32,
+        mode_info:      u32,
+        mode:           u16,
+        interface_seg:  u16,
+        interface_off:  u16,
+        interface_len:  u16,
+    },
+    framebuffer: extern struct {
+        addr:   u64,
+        pitch:  u32,
+        width:  u32,
+        height: u32,
+        bpp:    u8,
+        _type:   u8,
+        u: extern union {
+            palette: extern struct {
+                addr:       u32,
+                num_colors: u16,
+            },
+            colours: extern struct {
+                red_field_position:     u8,
+                red_mask_size:          u8,
+                green_field_position:   u8,
+                green_mask_size:        u8,
+                blue_field_position:    u8,
+                blue_mask_size:         u8,
+            },
         },
     },
+
+    pub const SymbolTable = extern struct {
+        tabsize:    u32,
+        strsize:    u32,
+        addr:       u32,
+        reserved:   u32,
+    };
+
+    pub const SectionTable = extern struct {
+        num:    u32,
+        size:   u32,
+        addr:   u32,
+        shndx:  u32,
+    };
 };
 
 pub const ModuleList = extern struct {
